@@ -1,8 +1,7 @@
 package com.io7m.saxon_plugin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -26,19 +25,21 @@ import net.sf.saxon.s9api.XsltTransformer;
 
 public final class Transform implements MessageListener, ErrorListener
 {
-  private final Configuration    config;
-  private final Processor        processor;
-  private final XsltCompiler     xslt;
-  private final XsltExecutable   xslt_exec;
-  private final XsltTransformer  xslt_trans;
+  private final Configuration   config;
+  private final Processor       processor;
+  private final XsltCompiler    xslt;
+  private final XsltExecutable  xslt_exec;
+  private final XsltTransformer xslt_trans;
 
-  private final FileInputStream  style_stream;
-  private final StreamSource     style_source;
-  private final FileInputStream  input_stream;
-  private final StreamSource     input_source;
-  private final FileOutputStream output_stream;
-  private final Serializer       output_serial;
-  private final String           output_file;
+  private final File            style_file;
+  private final StreamSource    style_source;
+
+  private final File            input_file;
+  private final StreamSource    input_source;
+
+  private final File            output_file;
+  private final Serializer      output_serial;
+  private final String          output_path;
 
   private static void createOutputDirectory(
     final Transformation transform)
@@ -71,23 +72,24 @@ public final class Transform implements MessageListener, ErrorListener
 
     Transform.createOutputDirectory(transformation);
 
-    this.style_stream =
-      new FileInputStream(transformation.getStylesheetFile());
-    this.style_source = new StreamSource(this.style_stream);
+    this.style_file = new File(transformation.getStylesheetFile());
+    if (this.style_file.isFile() == false) {
+      throw new FileNotFoundException(this.style_file.getAbsolutePath());
+    }
+    this.style_source = new StreamSource(this.style_file);
 
-    this.input_stream = new FileInputStream(transformation.getDocumentFile());
-    this.input_source = new StreamSource(this.input_stream);
+    this.input_file = new File(transformation.getDocumentFile());
+    if (this.input_file.isFile() == false) {
+      throw new FileNotFoundException(this.input_file.getAbsolutePath());
+    }
+    this.input_source = new StreamSource(this.input_file);
 
-    this.output_file =
+    this.output_path =
       transformation.getOutputDirectory()
         + File.separatorChar
         + transformation.getOutputFile();
-    this.output_stream = new FileOutputStream(this.output_file);
-    this.output_serial = new Serializer(this.output_stream);
-
-    assert this.style_stream == this.style_source.getInputStream();
-    assert this.input_stream == this.input_source.getInputStream();
-    assert this.output_stream == this.output_serial.getOutputDestination();
+    this.output_file = new File(this.output_path);
+    this.output_serial = new Serializer(this.output_file);
 
     this.config = new Configuration();
     this.config.setXIncludeAware(true);
@@ -174,18 +176,7 @@ public final class Transform implements MessageListener, ErrorListener
       if (this.xslt_trans != null) {
         this.xslt_trans.close();
       }
-      if (this.input_stream != null) {
-        this.input_stream.close();
-      }
-      if (this.output_stream != null) {
-        this.output_stream.close();
-      }
-      if (this.style_stream != null) {
-        this.style_stream.close();
-      }
     } catch (final SaxonApiException e) {
-      e.printStackTrace();
-    } catch (final IOException e) {
       e.printStackTrace();
     }
   }

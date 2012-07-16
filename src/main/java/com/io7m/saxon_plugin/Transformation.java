@@ -5,7 +5,6 @@ import java.util.Properties;
 public final class Transformation
 {
   private final Properties stylesheetParameters = new Properties();
-
   private String           stylesheetFile;
   private String           documentFile;
   private String           outputFile;
