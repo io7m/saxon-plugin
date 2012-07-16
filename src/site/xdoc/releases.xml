@@ -11,13 +11,156 @@
       Releases are made available through the <a href="http://search.maven.org/#search|ga|1|io7m-saxon-plugin">Central Repository</a>.
     </section>
     <section name="Usage">
-      Usage.
+      <p>
+        The plugin is intended to be simple to use and also to address
+        problems with the existing <a href="http://mojo.codehaus.org/xml-maven-plugin">xml-maven-plugin</a>
+        (such as not being able to enable <a href="http://w3.org/TR/xinclude">XIncludes</a> in
+        source XML documents without tweaking strange and poorly documented parameters
+        in libraries deep within the system).
+      </p>
+      <p>
+        The plugin allows the specification of any number of <tt>transformations</tt>.
+        That is, documents that will be transformed with named XSLT stylesheets and
+        written to a given output directory and/or file. The plugin can also pass
+        parameters to the stylesheet via the usual <tt>configuration</tt> section in the
+        POM file. XIncludes are automatically enabled for all documents.
+      </p>
+      <p>
+        The plugin has a single goal, <tt>transform</tt>, which occurs in the
+        <tt>generate-resources</tt> phase by default.
+      </p>
+      <p>
+        The plugin takes a list of <tt>transformation</tt> values as configuration
+        data. These are specified in the plugin <tt>configuration</tt> section as
+        is standard. A <tt>transformation</tt> consists of the following parameters:
+      </p>
+      <table>
+        <thead>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td><tt>stylesheetFile</tt></td>
+            <td><tt>String</tt></td>
+            <td>The path to the XSLT stylesheet, relative to <tt>${project.basedir}</tt>.</td>
+          </tr>
+          <tr>
+            <td><tt>documentFile</tt></td>
+            <td><tt>String</tt></td>
+            <td>The path to the XML document to be processed, relative to <tt>${project.basedir}</tt>.</td>
+          </tr>
+          <tr>
+            <td><tt>outputDirectory</tt></td>
+            <td><tt>String</tt></td>
+            <td>The directory in which to place the <tt>outputFile</tt>. Created if nonexistent.</td>
+          </tr>
+          <tr>
+            <td><tt>outputFile</tt></td>
+            <td><tt>String</tt></td>
+            <td>The file to which stylesheet output will be written, relative to the <tt>outputDirectory</tt>. Created if nonexistent.</td>
+          </tr>
+          <tr>
+            <td><tt>stylesheetParameters</tt></td>
+            <td><tt>java.util.Properties</tt></td>
+            <td>A list of string key/value pairs passed verbatim to the XSLT stylesheet.</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
     <section name="FAQ">
-      FAQ.
+      <subsection name="Result-Document">
+        <blockquote>
+          My stylesheet uses <tt>result-document</tt> to create multiple output
+          files. These are created in <tt>${project.basedir}</tt>! How do I stop this
+          from happening?
+        </blockquote>
+        <p>
+          Pass in a path to the stylesheet as an XSLT parameter, and prepend it to the
+          names of files passed to <tt>result-document</tt>.
+        </p>
+      </subsection>
+      <subsection name="XIncludes">
+        <blockquote>
+          How should paths be specified in XInclude elements?
+        </blockquote>
+        <p>
+          The input documents are processed with <tt>${project.basedir}</tt> as the
+          current directory. Therefore, documents should specify paths relative to
+          this directory:
+        </p>
+        <source>
+&lt;xi:include href="src/main/xml/file1.xml"/>
+        </source>
+      </subsection>
     </section>
     <section name="Examples">
-      Examples.
+      <p>
+        The following example processes the same file twice, writing the result to
+        two different output directories. It also passes a parameter named
+        <tt>io7m.structural-1_0_0.output_directory</tt> to the stylesheet in
+        both cases. A file named <tt>out.xml</tt> will be created in both directories
+        with the output of the stylesheet.
+      </p>
+      <source>
+&lt;project>
+  ...
+
+  &lt;build>
+    &lt;plugins>
+      &lt;plugin>
+        &lt;groupId>com.io7m.saxon-plugin&lt;/groupId>
+        &lt;artifactId>io7m-saxon-plugin&lt;/artifactId>
+        &lt;version>1.0.0&lt;/version>
+
+        &lt;executions>
+          &lt;execution>
+            &lt;goals>
+              &lt;goal>transform&lt;/goal>
+            &lt;/goals>
+          &lt;/execution>
+        &lt;/executions>
+
+        &lt;configuration>
+          &lt;transformations>
+
+            &lt;transformation>
+              &lt;stylesheetFile>src/main/xsl/main.xsl&lt;/stylesheetFile>
+              &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
+              &lt;outputDirectory>${project.build.directory}/xslt-output&lt;/outputDirectory>
+              &lt;outputFile>out.xml&lt;/outputFile>
+              &lt;stylesheetParameters>
+                &lt;property>
+                  &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
+                  &lt;value>${project.build.directory}/xslt-output&lt;/value>
+                &lt;/property>
+              &lt;/stylesheetParameters>
+            &lt;/transformation>
+
+            &lt;transformation>
+              &lt;stylesheetFile>src/main/xsl/main.xsl&lt;/stylesheetFile>
+              &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
+              &lt;outputDirectory>${project.build.directory}/xslt-output2&lt;/outputDirectory>
+              &lt;outputFile>out.xml&lt;/outputFile>
+              &lt;stylesheetParameters>
+                &lt;property>
+                  &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
+                  &lt;value>${project.build.directory}/xslt-output2&lt;/value>
+                &lt;/property>
+              &lt;/stylesheetParameters>
+            &lt;/transformation>
+
+          &lt;/transformations>
+        &lt;/configuration>
+
+      &lt;/plugin>
+    &lt;/plugins>
+  &lt;/build>
+
+  ...
+&lt;/project>
+      </source>
     </section>
     <section name="Changes">
       No changelog is available.
