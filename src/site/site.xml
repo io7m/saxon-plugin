@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="io7m-saxon-plugin">
+
+  <body>
+    <menu ref="reports"/>
+    <menu name="Plugin">
+      <item name="introduction" href="index.html"/>
+      <item name="usage"        href="usage.html"/>
+      <item name="faq"          href="faq.html"/>
+      <item name="goals"        href="plugin-info.html"/>
+    </menu>
+  </body>
+
+  <skin>
+    <groupId>com.io7m.io7m-mvn-skin</groupId>
+    <artifactId>io7m-mvn-skin</artifactId>
+    <version>1.0.0</version>
+  </skin>
+
+</project>

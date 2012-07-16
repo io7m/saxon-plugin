@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document
+  xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>io7m-saxon-plugin</title>
+  </properties>
+
+  <body>
+    <subsection name="saxon-plugin">
+      <p>
+        The <var>saxon-plugin</var> package provides a mindlessly simple
+        interface to <a href="http://saxonica.com">Saxon</a> for processing
+        XML documentation with XSLT during <a href="http://maven.apache.org">Maven</a>
+        builds.
+      </p>
+    </subsection>
+    <subsection name="features">
+      <ul>
+        <li>Fully documented (Javadoc).</li>
+        <li>ISC license.</li>
+      </ul>
+    </subsection>
+  </body>
+
+</document>
