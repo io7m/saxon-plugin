@@ -20,12 +20,12 @@ import org.apache.maven.plugin.logging.Log;
 public class SaxonMojo extends AbstractMojo
 {
   /**
-   * A list of transformations to perform.
+   * A transformation to perform.
    * 
    * @parameter
    */
 
-  private Transformation[] transformations;
+  private Transformation transformation;
 
   private void announce(
     final Transformation t)
@@ -45,19 +45,17 @@ public class SaxonMojo extends AbstractMojo
     throws MojoExecutionException
   {
     try {
-      if (this.transformations == null) {
-        throw new MojoExecutionException("no transformations specified");
+      if (this.transformation == null) {
+        throw new MojoExecutionException("no transformation specified");
       }
 
-      for (final Transformation config : this.transformations) {
-        assert config != null;
-        config.check();
-        this.announce(config);
+      this.transformation.check();
+      this.announce(this.transformation);
 
-        final Transform t = new Transform(config);
-        t.transform();
-        t.close();
-      }
+      final Transform t = new Transform(this.transformation);
+      t.transform();
+      t.close();
+
     } catch (final FileNotFoundException e) {
       throw new MojoExecutionException("File not found", e);
     } catch (final SaxonApiException e) {
