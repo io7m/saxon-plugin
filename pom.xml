@@ -7,7 +7,7 @@
   <groupId>com.io7m.saxon-plugin</groupId>
   <artifactId>io7m-saxon-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>2.0.0</version>
+  <version>1.0.0</version>
   <name>io7m-saxon-plugin</name>
   <description>Simple XSLT processing with Saxon</description>
   <url>http://mvn.io7m.com/saxon-plugin</url>
