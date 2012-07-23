@@ -8,7 +8,9 @@
   </properties>
   <body>
     <section name="Releases">
-      Releases are made available through the <a href="http://search.maven.org/#search|ga|1|io7m-saxon-plugin">Central Repository</a>.
+      <p>
+        Releases are made available through the <a href="http://search.maven.org/#search|ga|1|io7m-saxon-plugin">Central Repository</a>.
+      </p>
     </section>
     <section name="Usage">
       <p>
@@ -30,15 +32,17 @@
         <tt>generate-resources</tt> phase by default.
       </p>
       <p>
-        The plugin takes a list of <tt>transformation</tt> values as configuration
+        The plugin takes a <tt>transformation</tt> value as configuration
         data. These are specified in the plugin <tt>configuration</tt> section as
         is standard. A <tt>transformation</tt> consists of the following parameters:
       </p>
       <table>
         <thead>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
         </thead>
         <tbody>
           <tr>
@@ -103,44 +107,47 @@
 
         &lt;executions>
           &lt;execution>
+            &lt;id>one&lt;id>
             &lt;goals>
               &lt;goal>transform&lt;/goal>
             &lt;/goals>
+            &lt;configuration>
+              &lt;transformation>
+                &lt;stylesheetFile>src/main/xsl/main.xsl&lt;/stylesheetFile>
+                &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
+                &lt;outputDirectory>${project.build.directory}/xslt-output&lt;/outputDirectory>
+                &lt;outputFile>out.xml&lt;/outputFile>
+                &lt;stylesheetParameters>
+                  &lt;property>
+                    &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
+                    &lt;value>${project.build.directory}/xslt-output&lt;/value>
+                  &lt;/property>
+                &lt;/stylesheetParameters>
+              &lt;/transformation>
+            &lt;/configuration>
+          &lt;/execution>
+
+          &lt;execution>
+            &lt;id>two&lt;id>
+            &lt;goals>
+              &lt;goal>transform&lt;/goal>
+            &lt;/goals>
+            &lt;configuration>
+              &lt;transformation>
+                &lt;stylesheetFile>src/main/xsl/main.xsl&lt;/stylesheetFile>
+                &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
+                &lt;outputDirectory>${project.build.directory}/xslt-output2&lt;/outputDirectory>
+                &lt;outputFile>out.xml&lt;/outputFile>
+                &lt;stylesheetParameters>
+                  &lt;property>
+                    &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
+                    &lt;value>${project.build.directory}/xslt-output2&lt;/value>
+                  &lt;/property>
+                &lt;/stylesheetParameters>
+              &lt;/transformation>
+            &lt;/configuration>
           &lt;/execution>
         &lt;/executions>
-
-        &lt;configuration>
-          &lt;transformations>
-
-            &lt;transformation>
-              &lt;stylesheetFile>src/main/xsl/main.xsl&lt;/stylesheetFile>
-              &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
-              &lt;outputDirectory>${project.build.directory}/xslt-output&lt;/outputDirectory>
-              &lt;outputFile>out.xml&lt;/outputFile>
-              &lt;stylesheetParameters>
-                &lt;property>
-                  &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
-                  &lt;value>${project.build.directory}/xslt-output&lt;/value>
-                &lt;/property>
-              &lt;/stylesheetParameters>
-            &lt;/transformation>
-
-            &lt;transformation>
-              &lt;stylesheetFile>src/main/xsl/main.xsl&lt;/stylesheetFile>
-              &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
-              &lt;outputDirectory>${project.build.directory}/xslt-output2&lt;/outputDirectory>
-              &lt;outputFile>out.xml&lt;/outputFile>
-              &lt;stylesheetParameters>
-                &lt;property>
-                  &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
-                  &lt;value>${project.build.directory}/xslt-output2&lt;/value>
-                &lt;/property>
-              &lt;/stylesheetParameters>
-            &lt;/transformation>
-
-          &lt;/transformations>
-        &lt;/configuration>
-
       &lt;/plugin>
     &lt;/plugins>
   &lt;/build>
@@ -150,7 +157,7 @@
       </source>
     </section>
     <section name="Changes">
-      No changelog is available.
+      <p>No changelog is available.</p>
     </section>
   </body>
 </document>
