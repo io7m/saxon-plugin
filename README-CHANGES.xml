@@ -3,6 +3,16 @@
   <c:project>io7m-saxon-plugin</c:project>
 
   <c:release ticket-system="com.io7m.fossil.saxon-plugin">
+    <c:date>2012-07-27</c:date>
+    <c:version>1.1.0</c:version>
+    <c:item>
+      <c:date>2012-07-27</c:date>
+      <c:type-code-new/>
+      <c:summary>Added outputDirectoryParameterName for correct URI handling</c:summary>
+    </c:item>
+  </c:release>
+ 
+  <c:release ticket-system="com.io7m.fossil.saxon-plugin">
     <c:date>2012-07-23</c:date>
     <c:version>1.0.0</c:version>
     <c:item>
