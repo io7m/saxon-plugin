@@ -3,6 +3,9 @@ package com.io7m.saxon_plugin;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -29,17 +32,19 @@ public final class Transform implements MessageListener, ErrorListener
   private final Processor       processor;
   private final XsltCompiler    xslt;
   private final XsltExecutable  xslt_exec;
+
   private final XsltTransformer xslt_trans;
-
   private final File            style_file;
+
   private final StreamSource    style_source;
-
   private final File            input_file;
-  private final StreamSource    input_source;
 
+  private final StreamSource    input_source;
   private final File            output_file;
   private final Serializer      output_serial;
   private final String          output_path;
+
+  private final Transformation  transformation;
 
   private static void createOutputDirectory(
     final Transformation transform)
@@ -69,18 +74,21 @@ public final class Transform implements MessageListener, ErrorListener
   {
     assert transformation != null;
     transformation.check();
+    this.transformation = transformation;
 
     Transform.createOutputDirectory(transformation);
 
     this.style_file = new File(transformation.getStylesheetFile());
     if (this.style_file.isFile() == false) {
-      throw new FileNotFoundException(this.style_file.getAbsolutePath());
+      final String path = this.style_file.toString();
+      throw new FileNotFoundException(path);
     }
     this.style_source = new StreamSource(this.style_file);
 
     this.input_file = new File(transformation.getDocumentFile());
     if (this.input_file.isFile() == false) {
-      throw new FileNotFoundException(this.input_file.getAbsolutePath());
+      final String path = this.input_file.toString();
+      throw new FileNotFoundException(path);
     }
     this.input_source = new StreamSource(this.input_file);
 
@@ -128,14 +136,51 @@ public final class Transform implements MessageListener, ErrorListener
       final String val = (String) e.getValue();
       this.xslt_trans.setParameter(new QName(key), new XdmAtomicValue(val));
     }
+
+    if (transformation.getOutputDirectoryParameterName() != null) {
+      final String path =
+        new File(transformation.getOutputDirectory()).toURI().toString();
+      final String key = transformation.getOutputDirectoryParameterName();
+      this.xslt_trans.setParameter(new QName(key), new XdmAtomicValue(path));
+    }
   }
 
-  @Override public void message(
-    final XdmNode node,
-    final boolean terminate,
-    final SourceLocator locator)
+  void announce(
+    final OutputStream s)
+    throws IOException
   {
-    System.err.println("message: " + node.getStringValue());
+    final Writer w = new OutputStreamWriter(s);
+    final String out =
+      this.transformation.getOutputDirectory()
+        + File.separatorChar
+        + this.transformation.getOutputFile();
+
+    w.write("Transform document      : "
+      + this.transformation.getDocumentFile()
+      + "\n");
+    w.write("Transform stylesheet    : "
+      + this.transformation.getStylesheetFile()
+      + "\n");
+    w.write("Transform directory     : "
+      + this.transformation.getOutputDirectory()
+      + "\n");
+    w.write("Transform output file   : "
+      + this.transformation.getOutputFile()
+      + "\n");
+    w.write("Transform output actual : " + out + "\n");
+    w.write("--\n");
+    w.flush();
+  }
+
+  public void close()
+  {
+    try {
+      if (this.xslt_trans != null) {
+        this.xslt_trans.close();
+      }
+    } catch (final SaxonApiException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override public void error(
@@ -152,11 +197,12 @@ public final class Transform implements MessageListener, ErrorListener
     System.err.println("fatal: " + exception.getMessageAndLocation());
   }
 
-  @Override public void warning(
-    final TransformerException exception)
-    throws TransformerException
+  @Override public void message(
+    final XdmNode node,
+    final boolean terminate,
+    final SourceLocator locator)
   {
-    System.err.println("warn: " + exception.getMessageAndLocation());
+    System.err.println("message: " + node.getStringValue());
   }
 
   /**
@@ -170,14 +216,10 @@ public final class Transform implements MessageListener, ErrorListener
     this.xslt_trans.transform();
   }
 
-  public void close()
+  @Override public void warning(
+    final TransformerException exception)
+    throws TransformerException
   {
-    try {
-      if (this.xslt_trans != null) {
-        this.xslt_trans.close();
-      }
-    } catch (final SaxonApiException e) {
-      e.printStackTrace();
-    }
+    System.err.println("warn: " + exception.getMessageAndLocation());
   }
 }

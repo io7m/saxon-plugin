@@ -33,12 +33,12 @@ public class SaxonMojo extends AbstractMojo
     final Log log = this.getLog();
     final String out =
       t.getOutputDirectory() + File.separatorChar + t.getOutputFile();
-    log.info("Transform: "
-      + t.getDocumentFile()
-      + " using "
-      + t.getStylesheetFile()
-      + " to "
-      + out);
+    
+    log.info("Transform document      : " + t.getDocumentFile());
+    log.info("Transform stylesheet    : " + t.getStylesheetFile());
+    log.info("Transform directory     : " + t.getOutputDirectory());
+    log.info("Transform output file   : " + t.getOutputFile());
+    log.info("Transform output actual : " + out);
   }
 
   @Override public void execute()

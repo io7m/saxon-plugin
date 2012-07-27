@@ -41,6 +41,7 @@
           <tr>
             <th>Name</th>
             <th>Type</th>
+            <th>Required</th>
             <th>Description</th>
           </tr>
         </thead>
@@ -48,26 +49,37 @@
           <tr>
             <td><tt>stylesheetFile</tt></td>
             <td><tt>String</tt></td>
+            <td><tt>Required</tt></td>
             <td>The path to the XSLT stylesheet, relative to <tt>${project.basedir}</tt>.</td>
           </tr>
           <tr>
             <td><tt>documentFile</tt></td>
             <td><tt>String</tt></td>
+            <td><tt>Required</tt></td>
             <td>The path to the XML document to be processed, relative to <tt>${project.basedir}</tt>.</td>
           </tr>
           <tr>
             <td><tt>outputDirectory</tt></td>
             <td><tt>String</tt></td>
+            <td><tt>Required</tt></td>
             <td>The directory in which to place the <tt>outputFile</tt>. Created if nonexistent.</td>
+          </tr>
+          <tr>
+            <td><tt>outputDirectoryParameterName</tt></td>
+            <td><tt>String</tt></td>
+            <td><tt>Optional</tt></td>
+            <td>The name of the stylesheet parameter to which the value of <tt>outputDirectory</tt> will be passed.</td>
           </tr>
           <tr>
             <td><tt>outputFile</tt></td>
             <td><tt>String</tt></td>
+            <td><tt>Required</tt></td>
             <td>The file to which stylesheet output will be written, relative to the <tt>outputDirectory</tt>. Created if nonexistent.</td>
           </tr>
           <tr>
             <td><tt>stylesheetParameters</tt></td>
             <td><tt>java.util.Properties</tt></td>
+            <td><tt>Optional</tt></td>
             <td>A list of string key/value pairs passed verbatim to the XSLT stylesheet.</td>
           </tr>
         </tbody>
@@ -81,8 +93,18 @@
           from happening?
         </blockquote>
         <p>
-          Pass in a path to the stylesheet as an XSLT parameter, and prepend it to the
-          names of files passed to <tt>result-document</tt>.
+          First, modify the stylesheet such that the names of files passed to
+          <tt>result-document</tt> are prepended with a stylesheet parameter. Then,
+          pass the name of this parameter in the <tt>outputDirectoryParameterName</tt>
+          variable of the <tt>transformation</tt> given in the POM. The plugin will
+          construct a URI based on <tt>outputDirectory</tt> and pass it to the stylesheet
+          at runtime.
+        </p>
+        <p>
+          Previous versions of the plugin had programmers pass this value as an ordinary
+          parameter in <tt>stylesheetParameters</tt>, but this caused problems with
+          paths on Windows operating systems (paths beginning with drive letter names
+          such as <tt>C:/</tt> would be interpreted as URIs).
         </p>
       </subsection>
     </section>
@@ -117,10 +139,11 @@
                 &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
                 &lt;outputDirectory>${project.build.directory}/xslt-output&lt;/outputDirectory>
                 &lt;outputFile>out.xml&lt;/outputFile>
+                &lt;outputDirectoryParameterName>io7m.structural-1_0_0.output_directory&lt;/outputDirectoryParameterName>
                 &lt;stylesheetParameters>
                   &lt;property>
-                    &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
-                    &lt;value>${project.build.directory}/xslt-output&lt;/value>
+                    &lt;name>colour&lt;/name>
+                    &lt;value>red&lt;/value>
                   &lt;/property>
                 &lt;/stylesheetParameters>
               &lt;/transformation>
@@ -138,12 +161,7 @@
                 &lt;documentFile>src/main/xml/main.xml&lt;/documentFile>
                 &lt;outputDirectory>${project.build.directory}/xslt-output2&lt;/outputDirectory>
                 &lt;outputFile>out.xml&lt;/outputFile>
-                &lt;stylesheetParameters>
-                  &lt;property>
-                    &lt;name>io7m.structural-1_0_0.output_directory&lt;/name>
-                    &lt;value>${project.build.directory}/xslt-output2&lt;/value>
-                  &lt;/property>
-                &lt;/stylesheetParameters>
+                &lt;outputDirectoryParameterName>io7m.structural-1_0_0.output_directory&lt;/outputDirectoryParameterName>
               &lt;/transformation>
             &lt;/configuration>
           &lt;/execution>
