@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<c:changelog xmlns:c="http://www.io7m.com/schemas/changelog/1.0.0">
+<c:changelog xmlns:c="http://schemas.io7m.com/changelog/2.0.0">
   <c:project>io7m-saxon-plugin</c:project>
 
-  <c:release ticket-system="com.io7m.fossil.saxon-plugin">
+  <c:release c:ticket-system="com.io7m.fossil.saxon-plugin">
     <c:date>2012-07-27</c:date>
     <c:version>1.1.0</c:version>
     <c:item>
@@ -11,8 +11,8 @@
       <c:summary>Added outputDirectoryParameterName for correct URI handling</c:summary>
     </c:item>
   </c:release>
- 
-  <c:release ticket-system="com.io7m.fossil.saxon-plugin">
+
+  <c:release c:ticket-system="com.io7m.fossil.saxon-plugin">
     <c:date>2012-07-23</c:date>
     <c:version>1.0.0</c:version>
     <c:item>
@@ -21,8 +21,9 @@
       <c:summary>Initial release</c:summary>
     </c:item>
   </c:release>
- 
+
   <c:ticket-system xml:id="com.io7m.fossil.saxon-plugin">
     <c:ticket-url>http://fossil.io7m.com/repo.cgi/io7m-saxon-plugin/tktview?name=</c:ticket-url>
   </c:ticket-system>
+
 </c:changelog>

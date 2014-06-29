@@ -20,9 +20,9 @@
   </licenses>
 
   <scm>
-    <url>http://fossil.io7m.com/repo.cgi/io7m-saxon-plugin</url>
-    <connection>scm:http://fossil.io7m.com/repo.cgi/io7m-saxon-plugin</connection>
-    <developerConnection>scm:http://fossil.io7m.com/repo.cgi/io7m-saxon-plugin</developerConnection>
+    <url>http://fossil.io7m.com/repo.cgi/${project.artifactId}</url>
+    <connection>scm:http://fossil.io7m.com/repo.cgi/${project.artifactId}</connection>
+    <developerConnection>scm:http://fossil.io7m.com/repo.cgi/${project.artifactId}</developerConnection>
   </scm>
 
   <developers>
@@ -40,7 +40,7 @@
   </organization>
 
   <issueManagement>
-    <url>http://fossil.io7m.com/repo.cgi/io7m-saxon-plugin</url>
+    <url>http://fossil.io7m.com/repo.cgi/${project.artifactId}</url>
     <system>Fossil</system>
   </issueManagement>
 
@@ -102,6 +102,17 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
         <version>2.3</version>
+      </plugin>
+      <plugin>
+        <groupId>com.io7m.changelog</groupId>
+        <artifactId>io7m-changelog-plugin</artifactId>
+        <version>2.1.0</version>
+        <inherited>false</inherited>
+        <configuration>
+          <file>README-CHANGES.xml</file>
+          <feedAuthorEmail>contact@io7m.com</feedAuthorEmail>
+          <feedAuthorName>io7m release robot</feedAuthorName>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>
