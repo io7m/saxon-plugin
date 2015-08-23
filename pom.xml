@@ -10,19 +10,19 @@
   <version>1.1.0</version>
   <name>io7m-saxon-plugin</name>
   <description>Simple XSLT processing with Saxon</description>
-  <url>http://mvn.io7m.com/saxon-plugin</url>
+  <url>http://io7m.github.io/saxon-plugin</url>
 
   <licenses>
     <license>
       <name>ISC License</name>
-      <url>http://www.opensource.org/licenses/isc-license.txt</url>
+      <url>http://io7m.com/license/isc.txt</url>
     </license>
   </licenses>
 
   <scm>
-    <url>http://fossil.io7m.com/repo.cgi/${project.artifactId}</url>
-    <connection>scm:http://fossil.io7m.com/repo.cgi/${project.artifactId}</connection>
-    <developerConnection>scm:http://fossil.io7m.com/repo.cgi/${project.artifactId}</developerConnection>
+    <url>https://github.com/io7m/saxon-plugin</url>
+    <connection>scm:git:https://github.com/io7m/saxon-plugin</connection>
+    <developerConnection>scm:git:https://github.com/io7m/saxon-plugin</developerConnection>
   </scm>
 
   <developers>
@@ -40,27 +40,21 @@
   </organization>
 
   <issueManagement>
-    <url>http://fossil.io7m.com/repo.cgi/${project.artifactId}</url>
-    <system>Fossil</system>
+    <url>http://github.com/io7m/saxon-plugin/issues</url>
+    <system>GitHub Issues</system>
   </issueManagement>
 
   <distributionManagement>
     <site>
-      <id>io7m</id>
-      <name>io7m.com</name>
-      <url>http://mvn.io7m.com/saxon-plugin/</url>
+      <id>GitHub</id>
+      <name>GitHub</name>
+      <url>${project.url}</url>
     </site>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
   </distributionManagement>
-
-  <mailingLists>
-    <mailingList>
-      <name>io7m-saxon-plugin</name>
-      <subscribe>io7m-saxon-plugin-join@lists.io7m.com</subscribe>
-      <unsubscribe>io7m-saxon-plugin-leave@lists.io7m.com</unsubscribe>
-      <post>io7m-saxon-plugin@lists.io7m.com</post>
-      <archive>http://lists.io7m.com/io7m-saxon-plugin/archive</archive>
-    </mailingList>
-  </mailingLists>
 
   <inceptionYear>2012</inceptionYear>
 
@@ -87,11 +81,6 @@
         <groupId>org.sonatype.maven.plugin</groupId>
         <artifactId>emma-maven-plugin</artifactId>
         <version>1.2</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8.1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -186,20 +175,6 @@
         </configuration>
       </plugin>
 
-      <!-- Check that the plugin documentation is compliant. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-docck-plugin</artifactId>
-        <version>1.0</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
       <!-- Create source jar -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -227,7 +202,16 @@
             <goals>
                <goal>jar</goal>
             </goals>
-         </execution>
+            <configuration>
+              <tagletArtifacts>
+                <tagletArtifact>
+                  <groupId>org.apache.maven.plugin-tools</groupId>
+                  <artifactId>maven-plugin-tools-javadoc</artifactId>
+                  <version>3.4</version>
+                </tagletArtifact>
+              </tagletArtifacts>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
 
@@ -252,52 +236,9 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh-external</artifactId>
-        <version>2.2</version>
+        <version>2.9</version>
       </extension>
     </extensions>
-
-    <!-- Mark certain plugins as ignored in Eclipse. Does not affect the build. -->
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.sonatype.maven.plugin</groupId>
-                    <artifactId>emma-maven-plugin</artifactId>
-                    <versionRange>[1.2,)</versionRange>
-                    <goals>
-                      <goal>instrument</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-docck-plugin</artifactId>
-                    <versionRange>[1.0,)</versionRange>
-                    <goals>
-                      <goal>check</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <!-- Sign artifacts when deploying to io7m -->
@@ -314,7 +255,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.4</version>
+            <version>1.6</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
