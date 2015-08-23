@@ -5,6 +5,7 @@ THIS PROJECT IS UNMAINTAINED.
 
 See https://io7m.github.io/saxon-plugin/ for more information.
 
+```
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
@@ -32,3 +33,4 @@ NoO1uNPyviHTrxqT1DV/joK3k6m5zHd4zQPRj+TpjmM1jN9mL2pfuafWAvldDbAN
 dxnTSf6ma9mrZAx1khTU
 =qGLP
 -----END PGP SIGNATURE-----
+```
